@@ -2,14 +2,16 @@
   * Created by jacquesmarzin on 28/02/2017.
   */
 import java.io.File
-
 import java.awt.geom.Point2D
+import javax.swing.text.Document
+
 import org.pdfclown.documents.Page
 import org.pdfclown.documents.contents.composition.PrimitiveComposer
-import org.pdfclown.documents.contents.fonts.StandardType1Font
+import org.pdfclown.documents.contents.fonts.{Font, StandardType1Font}
 import org.pdfclown.documents.contents.{ContentScanner, Contents}
 import org.pdfclown.documents.contents.objects._
 import org.pdfclown.files._
+import org.pdfclown.objects.PdfName
 import org.pdfclown.tools.TextExtractor
 
 import scala.collection.mutable
@@ -67,9 +69,10 @@ object essai extends App{
     }
     ligneC
   }
-
   val fichier = new org.pdfclown.files.File("ATD.pdf")
   val document = fichier.getDocument
+  val fonteOCR = Font.get(document, "ocr.ttf")
+
   val pages = document.getPages
   val page1 = pages.get(0)
   var contenus = page1.getContents
@@ -92,6 +95,7 @@ object essai extends App{
   var composer = new PrimitiveComposer(scanner)
   composer.setFont( new StandardType1Font( document, StandardType1Font.FamilyEnum.Courier, true, false), 10 )
   composer.showText("###", new Point2D.Double(10d,825d))
+  composer.setFont(fonteOCR,10)
   var y = 190d
   adresseAtd.foreach(ligne  => {
     composer.showText(ligne.texte, new Point2D.Double(295d,y))
